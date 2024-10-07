@@ -11,8 +11,8 @@ from lecture_2.hw.shop_api.app.item.contracts import (
     PatchItemRequest
 )
 
-_item_db = dict[int, Item]
-_cart_db = dict[int, Cart]
+_item_db = dict[int, Item]()
+_cart_db = dict[int, Cart]()
 
 def int_id_generator() -> Iterable[int]:
     i = 0
@@ -75,13 +75,21 @@ def get_carts_list(
            (max_price is None or cart.price <= max_price)
     ]
 
-    if min_quantity is not None and len(filtered_carts) < min_quantity:
-        return []
-
-    filtered_carts = filtered_carts[offset: offset + limit]
+    if min_quantity is not None:
+        filtered_carts = [
+            cart
+            for cart in filtered_carts
+            if sum(item.quantity for item in cart.items) >= min_quantity
+        ]
 
     if max_quantity is not None:
-        filtered_carts = filtered_carts[:max_quantity]
+        filtered_carts = [
+            cart
+            for cart in filtered_carts
+            if sum(item.quantity for item in cart.items) <= max_quantity
+        ]
+
+    filtered_carts = filtered_carts[offset: offset + limit]
 
     return filtered_carts
 
@@ -123,32 +131,12 @@ def create_item(item_request: ItemRequest) -> Item:
 def get_item(id: int) -> Item | None:
     return _item_db.get(id)
 
-# def get_items_list(
-#         min_price: float | None,
-#         max_price: float | None,
-#         offset: int = 0,
-#         limit: int = 10,
-#         show_deleted: bool = False
-# ) -> List[Item]:
-    
-#     filtered_items = [
-#         item for item in list(_item_db.values())
-#         if (min_price is None or item.price >= min_price) and
-#            (max_price is None or item.price <= max_price) and
-#            (show_deleted or (not item.deleted))
-#     ]
-
-#     if filtered_items and len(filtered_items) >= (limit + offset):
-#         filtered_items = filtered_items[offset : offset + limit]
-    
-#     return filtered_items
-
 def get_items_list(
-        min_price: float | None = None,
-        max_price: float | None = None,
-        offset: int = 0,
-        limit: int = 10,
-        show_deleted: bool = False
+        offset: int,
+        limit: int,
+        min_price: float | None,
+        max_price: float | None,
+        show_deleted: bool
 ) -> List[Item]:
     
     filtered_items = [

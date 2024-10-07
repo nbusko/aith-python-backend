@@ -42,9 +42,9 @@ async def create_cart(response: Response) -> CartResponse:
     status_code=HTTPStatus.OK,
     response_model=CartResponse,
 )
-async def get_cart(id: int) -> CartResponse:
+async def get_cart(cart_id: int) -> CartResponse:
     try:
-        cart = queries.get_cart(id)
+        cart = queries.get_cart(cart_id)
         if cart is None:
             raise HTTPException(
                 status_code=HTTPStatus.NOT_FOUND, detail="Cart not found"

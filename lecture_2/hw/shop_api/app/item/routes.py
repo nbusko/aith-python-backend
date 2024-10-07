@@ -66,16 +66,16 @@ async def get_items_list(
     limit: int = Query(10, gt=0),
     min_price: Optional[float] = Query(None, ge=0),
     max_price: Optional[float] = Query(None, ge=0),
-    show_deleted: bool = Query(False)
+    show_deleted: bool = False,
 ):
     try:
         items = queries.get_items_list(offset, limit, min_price, max_price, show_deleted)
-        if not items:
-            raise HTTPException(status_code=HTTPStatus.NOT_FOUND, detail="Items not found")
-        return items
     except Exception as e:
         raise HTTPException(status_code=HTTPStatus.UNPROCESSABLE_ENTITY, detail=f"Error retrieving items: {str(e)}")
-
+    if items is None:
+        raise HTTPException(status_code=HTTPStatus.NOT_FOUND, detail="Items not found")
+    return items
+    
 @router.put(
     "/{id}",
     responses={
