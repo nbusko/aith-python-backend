@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "hse-python-backend"
+name = "aith-python-backend"
 version = "0.1.0"
 description = ""
 authors = ["Ilya Katun <katun.ilya@gmail.com>"]
