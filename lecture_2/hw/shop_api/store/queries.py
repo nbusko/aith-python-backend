@@ -1,12 +1,12 @@
 from typing import Iterable, List
 
-from models import (
+from lecture_2.hw.shop_api.store.models import (
     Cart, 
     CartItem, 
     Item
 )
 
-from shop_api.app.item.contracts import (
+from lecture_2.hw.shop_api.app.item.contracts import (
     ItemRequest,
     PatchItemRequest
 )
