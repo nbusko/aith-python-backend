@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "hse-python-backend"
+name = "aith-python-backend"
 version = "0.1.0"
 description = ""
 authors = ["Ilya Katun <katun.ilya@gmail.com>"]
@@ -19,6 +19,7 @@ prometheus-fastapi-instrumentator = "^7.0.0"
 
 [tool.poetry.group.dev.dependencies]
 ruff = "^0.6.5"
+pytest = "^8.3.3"
 
 
 [tool.poetry.group.test.dependencies]
